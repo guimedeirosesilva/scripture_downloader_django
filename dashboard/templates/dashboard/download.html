@@ -1,0 +1,44 @@
+{% extends "dashboard/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div id="files_downloaded">
+        <p class="mt-5 mb-3">
+        <b>Files downloaded:</b><br/>
+        {% for file in files_downloaded %}
+            <a href="{% static file.url %}" download>✓ {{ file.name }}</a><br/>
+        {% endfor %}
+        </p>
+    </div>
+
+    {{files_downloaded|json_script:"files_downloaded_data"}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function downloadFile(filename) {
+                const link = document.createElement('a');
+                link.href = `static/${filename.url}`;
+                console.log(link.href)
+                link.download = filename.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        
+            // Convert the JSON string to a JavaScript array
+            const data = document.querySelector('#files_downloaded_data').textContent
+            document.querySelector("#files_downloaded_data").remove()
+
+            const filesToDownload = JSON.parse(data)
+
+            if (Array.isArray(filesToDownload)) {
+                // Trigger downloads for each file in the array
+                filesToDownload.forEach(function (file) {
+                    downloadFile(file);
+                });
+            }
+        });
+    </script>
+
+{% endblock %}

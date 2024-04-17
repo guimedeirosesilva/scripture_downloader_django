@@ -1,0 +1,15 @@
+{% extends "dashboard/layout.html" %}
+
+{% block body %}
+    <form method="post" action="{% url 'download' %}">
+        {% csrf_token %}
+
+        <div class="form-floating">
+        <textarea name="query_to_download" class="form-control" id="floatingInput" rows="3" placeholder="Download Query" required></textarea>
+        <label for="floatingInput">Download Query</label>
+        </div>
+
+        <button id="download_btn" class="btn btn-primary w-100 py-2 mt-3" type="submit" data-loading-text="Loading...">Download</button>
+
+    </form>
+{% endblock %}
